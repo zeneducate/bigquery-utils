@@ -40,3 +40,6 @@ target/
 .df-credentials.json
 node_modules/
 package-lock.json
+udfs/tests/dataform_testing_framework/dataform.json
+udfs/tests/dataform_testing_framework/community_deploy/
+udfs/tests/dataform_testing_framework/community_test/

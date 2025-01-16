@@ -3559,3 +3559,11 @@ generate_udaf_test("cw_mode_timestamp",
   }
 );
 
+generate_udf_test("titleize", [
+  { inputs: [`"hello-world"`], expected_output: `"Hello World"` },
+  { inputs: [`"_hello-world____i_am here"`], expected_output: `" Hello World I Am Here"` },
+  { inputs: [`"Hello World"`], expected_output: `"Hello World"` },
+  { inputs: [`"Hello"`], expected_output: `"Hello"` },
+  { inputs: [`"hello a.b.c d"`], expected_output: `"Hello A.B.C D"` },
+  { inputs: [`"hello,a WORLD"`], expected_output: `"Hello,A World"` },
+]);
