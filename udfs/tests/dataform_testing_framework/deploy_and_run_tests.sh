@@ -250,13 +250,19 @@ main() {
       # which is mapped in dir_to_dataset_map.yaml
       local dataset_id
       dataset_id=$(sed -rn "s/${udf_dir}: (.*)/\1/p" <../../dir_to_dataset_map.yaml)
-      # Region suffixes are used to deploy UDFs globally to bqutil without naming conflicts
-      # US multi-region datasets remain without suffix to avoid breaking changes to legacy users
-      if [[  "${BQ_LOCATION^^}" != "US" ]]; then
-        local region_suffix=$(echo "$BQ_LOCATION" | tr '[:upper:]' '[:lower:]' | tr '-' '_')
-        dataset_id="${dataset_id}_${region_suffix}"
-        printf "Dataset ID with region suffix: %s\n" "${dataset_id}"
-      fi
+
+      # NOTE We aren't a legacy user and want to put the UDFs in the
+      # same schema otherwise our DBT code has to be location-specific
+      # and that's a pain to maintain 20250116:mb
+
+      # # Region suffixes are used to deploy UDFs globally to bqutil without naming conflicts
+      # # US multi-region datasets remain without suffix to avoid breaking changes to legacy users
+      # if [[  "${BQ_LOCATION^^}" != "US" ]]; then
+      #   local region_suffix=$(echo "$BQ_LOCATION" | tr '[:upper:]' '[:lower:]' | tr '-' '_')
+      #   dataset_id="${dataset_id}_${region_suffix}"
+      #   printf "Dataset ID with region suffix: %s\n" "${dataset_id}"
+      # fi
+
       printf "*************** "
       printf "Testing UDFs in BigQuery dataset: %s%s" "${dataset_id}" "${SHORT_SHA}"
       printf " ***************\n"
