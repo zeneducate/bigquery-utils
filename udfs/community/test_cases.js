@@ -3567,3 +3567,10 @@ generate_udf_test("titleize", [
   { inputs: [`"hello a.b.c d"`], expected_output: `"Hello A.B.C D"` },
   { inputs: [`"hello,a WORLD"`], expected_output: `"Hello,A World"` },
 ]);
+
+generate_udf_test("json_has_nonnull_property", [
+  { inputs: [`json '{}'          `, ` 'a' `], expected_output: `false` },
+  { inputs: [`json '{"a": null}' `, ` 'a' `], expected_output: `false` },
+  { inputs: [`json '{"a": {}}'   `, ` 'a' `], expected_output: `true`  },
+  { inputs: [`json '{"a": "x"}'  `, ` 'a' `], expected_output: `true`  },
+]);
