@@ -3597,3 +3597,12 @@ generate_udf_test("week_ending", [
   { inputs: [`"2025-02-05 14:30:00"`],           expected_output: `DATE "2025-02-07"` },
   { inputs: [`"2025-02-05"`],                    expected_output: `DATE "2025-02-07"` },
 ]);
+
+generate_udf_test("json_merge", [
+  { inputs: [`JSON '{}'`, `JSON '{}'`], expected_output: `JSON '{}'` },
+  { inputs: [`JSON '{}'`, `JSON '{"a": 1}'`], expected_output: `JSON '{"a": 1}'` },
+  { inputs: [`JSON '{"a": 1}'`, `JSON '{}'`], expected_output: `JSON '{"a": 1}'` },
+  { inputs: [`JSON '{"a": 1}'`, `JSON '{"a": 2}'`], expected_output: `JSON '{"a": 2}'` },
+  { inputs: [`JSON '{"a": 1}'`, `JSON '{"b": 2}'`], expected_output: `JSON '{"a": 1, "b": 2}'` },
+  { inputs: [`JSON '{"a": 1, "b": 2}'`, `JSON '{"b": 3}'`], expected_output: `JSON '{"a": 1, "b": 3}'` },
+]);
