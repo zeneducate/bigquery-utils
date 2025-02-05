@@ -3574,3 +3574,15 @@ generate_udf_test("json_has_nonnull_property", [
   { inputs: [`json '{"a": {}}'   `, ` 'a' `], expected_output: `true`  },
   { inputs: [`json '{"a": "x"}'  `, ` 'a' `], expected_output: `true`  },
 ]);
+
+generate_udf_test("postcode_outcode", [
+  { inputs: [`"SW1A 1AA"`], expected_output: `"SW1A"` },
+  { inputs: [`"E14 3BE"`], expected_output: `"E14"` },
+  { inputs: [`"FooBar"`], expected_output: `"FooBar"` },
+]);
+
+generate_udf_test("postcode_outcode", [
+  { inputs: [`"SW1A 1AA"`], expected_output: `"SW1A"` },
+  { inputs: [`"E14 3BE"`], expected_output: `"E14"` },
+  { inputs: [`"FooBar"`], expected_output: `"FooBar"` },
+]);
