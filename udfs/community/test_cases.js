@@ -3581,16 +3581,19 @@ generate_udf_test("postcode_outcode", [
   { inputs: [`"FooBar"`], expected_output: `"FooBar"` },
 ]);
 
-generate_udf_test("postcode_outcode", [
-  { inputs: [`"SW1A 1AA"`], expected_output: `"SW1A"` },
-  { inputs: [`"E14 3BE"`], expected_output: `"E14"` },
-  { inputs: [`"FooBar"`], expected_output: `"FooBar"` },
+generate_udf_test("week_ending", [
+  { inputs: [`TIMESTAMP "2025-02-05 14:30:00"`], expected_output: `DATE "2025-02-07"` },
 ]);
 
 generate_udf_test("week_ending", [
-  { inputs: [`TIMESTAMP "2025-02-05 14:30:00"`], expected_output: `DATE "2025-02-07"` },
   { inputs: [`DATE "2025-02-05"`],               expected_output: `DATE "2025-02-07"` },
+]);
+
+generate_udf_test("week_ending", [
   { inputs: [`DATETIME "2025-02-05 14:30:00"`],  expected_output: `DATE "2025-02-07"` },
+]);
+
+generate_udf_test("week_ending", [
   { inputs: [`"2025-02-05 14:30:00"`],           expected_output: `DATE "2025-02-07"` },
   { inputs: [`"2025-02-05"`],                    expected_output: `DATE "2025-02-07"` },
 ]);
