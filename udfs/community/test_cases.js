@@ -3606,3 +3606,8 @@ generate_udf_test("json_merge", [
   { inputs: [`JSON '{"a": 1}'`, `JSON '{"b": 2}'`], expected_output: `JSON '{"a": 1, "b": 2}'` },
   { inputs: [`JSON '{"a": 1, "b": 2}'`, `JSON '{"b": 3}'`], expected_output: `JSON '{"a": 1, "b": 3}'` },
 ]);
+
+generate_udf_test("is_zeneducate_email", [
+  { inputs: [`"contact@example.com"`], expected_output: `false` },
+  { inputs: [`"admin@zeneducate.com"`], expected_output: `true` },
+])
