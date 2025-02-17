@@ -3559,54 +3559,6 @@ generate_udaf_test("cw_mode_timestamp",
   }
 );
 
-generate_udf_test("titleize", [
-  { inputs: [`"hello-world"`], expected_output: `"Hello World"` },
-  { inputs: [`"_hello-world____i_am here"`], expected_output: `" Hello World I Am Here"` },
-  { inputs: [`"Hello World"`], expected_output: `"Hello World"` },
-  { inputs: [`"Hello"`], expected_output: `"Hello"` },
-  { inputs: [`"hello a.b.c d"`], expected_output: `"Hello A.B.C D"` },
-  { inputs: [`"hello,a WORLD"`], expected_output: `"Hello,A World"` },
-]);
-
-generate_udf_test("json_has_nonnull_property", [
-  { inputs: [`json '{}'          `, ` 'a' `], expected_output: `false` },
-  { inputs: [`json '{"a": null}' `, ` 'a' `], expected_output: `false` },
-  { inputs: [`json '{"a": {}}'   `, ` 'a' `], expected_output: `true`  },
-  { inputs: [`json '{"a": "x"}'  `, ` 'a' `], expected_output: `true`  },
-]);
-
-generate_udf_test("postcode_outcode", [
-  { inputs: [`"SW1A 1AA"`], expected_output: `"SW1A"` },
-  { inputs: [`"E14 3BE"`], expected_output: `"E14"` },
-  { inputs: [`"FooBar"`], expected_output: `"FooBar"` },
-]);
-
-generate_udf_test("week_ending", [
-  { inputs: [`TIMESTAMP "2025-02-05 14:30:00"`], expected_output: `DATE "2025-02-07"` },
-]);
-
-generate_udf_test("week_ending", [
-  { inputs: [`DATE "2025-01-31"`],               expected_output: `DATE "2025-01-31"` },
-  { inputs: [`DATE "2025-02-01"`],               expected_output: `DATE "2025-02-07"` },
-  { inputs: [`DATE "2025-02-02"`],               expected_output: `DATE "2025-02-07"` },
-  { inputs: [`DATE "2025-02-03"`],               expected_output: `DATE "2025-02-07"` },
-  { inputs: [`DATE "2025-02-04"`],               expected_output: `DATE "2025-02-07"` },
-  { inputs: [`DATE "2025-02-05"`],               expected_output: `DATE "2025-02-07"` },
-  { inputs: [`DATE "2025-02-06"`],               expected_output: `DATE "2025-02-07"` },
-  { inputs: [`DATE "2025-02-07"`],               expected_output: `DATE "2025-02-07"` },
-  { inputs: [`DATE "2025-02-08"`],               expected_output: `DATE "2025-02-14"` },
-  { inputs: [`DATE "2025-02-09"`],               expected_output: `DATE "2025-02-14"` },
-]);
-
-generate_udf_test("week_ending", [
-  { inputs: [`DATETIME "2025-02-05 14:30:00"`],  expected_output: `DATE "2025-02-07"` },
-]);
-
-generate_udf_test("week_ending", [
-  { inputs: [`"2025-02-05 14:30:00"`],           expected_output: `DATE "2025-02-07"` },
-  { inputs: [`"2025-02-05"`],                    expected_output: `DATE "2025-02-07"` },
-]);
-
 generate_udf_test("json_merge", [
   { inputs: [`JSON '{}'`, `JSON '{}'`], expected_output: `JSON '{}'` },
   { inputs: [`JSON '{}'`, `JSON '{"a": 1}'`], expected_output: `JSON '{"a": 1}'` },
@@ -3615,8 +3567,3 @@ generate_udf_test("json_merge", [
   { inputs: [`JSON '{"a": 1}'`, `JSON '{"b": 2}'`], expected_output: `JSON '{"a": 1, "b": 2}'` },
   { inputs: [`JSON '{"a": 1, "b": 2}'`, `JSON '{"b": 3}'`], expected_output: `JSON '{"a": 1, "b": 3}'` },
 ]);
-
-generate_udf_test("is_zeneducate_email", [
-  { inputs: [`"contact@example.com"`], expected_output: `false` },
-  { inputs: [`"admin@zeneducate.com"`], expected_output: `true` },
-])

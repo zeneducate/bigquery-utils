@@ -170,7 +170,7 @@ test_udfs() {
     cp "${udfs_source_dir}"/test_cases.js "${udfs_target_dir}"/definitions/test_cases.js
     generate_dataform_config_and_creds "${project_id}" "${dataset_id}" "${udfs_target_dir}"
     add_symbolic_dataform_dependencies "${udfs_target_dir}"
-    
+
     printf "Testing UDFs using dataform test command\n"
     if ! (cd "${udfs_target_dir}" && dataform test .); then
       # If any error occurs when testing, delete BigQuery testing dataset before exiting with status code 1.
@@ -269,7 +269,7 @@ main() {
 
       # SHORT_SHA environment variable below comes from
       # cloud build when the trigger originates from a github commit.
-      if [[ $udf_dir == 'community' ]]; then
+      if [[ $udf_dir == 'community' || $udf_dir = 'zen' ]]; then
         # Deploy all UDFs in the community folder
         deploy_udfs \
           "${PROJECT_ID}" \
@@ -282,7 +282,7 @@ main() {
         test_udfs \
           "${PROJECT_ID}" \
           "${dataset_id}${SHORT_SHA}" \
-          "$(pwd)"/../../community \
+          "$(pwd)"/../../"${udf_dir}" \
           "${udf_dir}"_test
       else # Deploy all UDFs in the migration folder
         deploy_udfs \
