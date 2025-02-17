@@ -17,10 +17,9 @@ config { hasOutput: true } -- -*- sql -*-
 
 -- week_ending:
 -- Input: A date, timestamp, datetime, or string in a format that can be cast to a timestamp
--- Output: The Friday week ending date of the week that the input date is in
-
+-- Output: The Friday at the end of the week, assuming the week starts on Saturday.
 CREATE OR REPLACE FUNCTION ${self()}(ts ANY TYPE)
 RETURNS DATE
 AS (
-  DATE(DATE_ADD(DATE_TRUNC(CAST(ts AS TIMESTAMP), WEEK(MONDAY)), INTERVAL 4 DAY))
+  LAST_DAY(DATE(CAST(ts AS TIMESTAMP)), WEEK(SATURDAY))
 );

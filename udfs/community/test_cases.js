@@ -3586,7 +3586,16 @@ generate_udf_test("week_ending", [
 ]);
 
 generate_udf_test("week_ending", [
+  { inputs: [`DATE "2025-01-31"`],               expected_output: `DATE "2025-01-31"` },
+  { inputs: [`DATE "2025-02-01"`],               expected_output: `DATE "2025-02-07"` },
+  { inputs: [`DATE "2025-02-02"`],               expected_output: `DATE "2025-02-07"` },
+  { inputs: [`DATE "2025-02-03"`],               expected_output: `DATE "2025-02-07"` },
+  { inputs: [`DATE "2025-02-04"`],               expected_output: `DATE "2025-02-07"` },
   { inputs: [`DATE "2025-02-05"`],               expected_output: `DATE "2025-02-07"` },
+  { inputs: [`DATE "2025-02-06"`],               expected_output: `DATE "2025-02-07"` },
+  { inputs: [`DATE "2025-02-07"`],               expected_output: `DATE "2025-02-07"` },
+  { inputs: [`DATE "2025-02-08"`],               expected_output: `DATE "2025-02-14"` },
+  { inputs: [`DATE "2025-02-09"`],               expected_output: `DATE "2025-02-14"` },
 ]);
 
 generate_udf_test("week_ending", [
