@@ -51,3 +51,15 @@ generate_udf_test("platform_time_string_to_time", [
   { inputs: [`"12:59 am"`], expected_output: `TIME '00:59:00'` },
   { inputs: [`"01:01 am"`], expected_output: `TIME '01:01:00'` },
 ])
+
+generate_udf_test("platform_numeric_string_to_numeric", [
+  { inputs: [`"  "`], expected_output: `NUMERIC '0'` },
+  { inputs: [`""`], expected_output: `NUMERIC '0'` },
+  { inputs: [`"1"`], expected_output: `NUMERIC '1'` },
+  { inputs: [`"1.1"`], expected_output: `NUMERIC '1.1'` },
+  { inputs: [`"-1.1"`], expected_output: `NUMERIC '-1.1'` },
+  { inputs: [`"9,999.1"`], expected_output: `NUMERIC '9999.1'` },
+  { inputs: [`"9,999,999.1"`], expected_output: `NUMERIC '9999999.1'` },
+  { inputs: [`"1,234,567,890,123,456,789,012,345.6789"`], expected_output: `NUMERIC '1234567890123456789012345.6789'` }
+
+])

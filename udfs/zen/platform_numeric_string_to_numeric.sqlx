@@ -15,19 +15,17 @@ config { hasOutput: true }
  * limitations under the License.
  */
 
--- platform_time_to_timestamp:
+-- platform_numeric_string_to_numeric
 -- Input: value STRING
--- Output: A BigQuery TIME or NULL
+-- Output: A BigQuery NUMERIC or NULL
 CREATE OR REPLACE FUNCTION ${self()}(value STRING)
-RETURNS TIME
+RETURNS NUMERIC
 AS (
   case
-    when regexp_contains(value, r'^\d{1,2}:\d{1,2}:\d{1,2}$')
-    then parse_time('%H:%M:%S', value)
-    when regexp_contains(value, r'^\d{1,2}:\d{1,2}$')
-    then parse_time('%H:%M', value)
-    when regexp_contains(lower(value), r'^\d{1,2}:\d{1,2} (am|pm)$')
-    then parse_time('%I:%M %p', value)
+    when trim(value) = ''
+    then 0
+    when regexp_contains(trim(value), r'^-?(\d{1,3})(,\d{3})*([.]\d+)?$')
+    then cast(regexp_replace(trim(value), ',', '') as numeric)
     else null
   end
 );
