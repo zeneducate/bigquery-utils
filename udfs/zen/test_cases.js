@@ -36,3 +36,18 @@ generate_udf_test("is_zeneducate_email", [
   { inputs: [`"contact@example.com"`], expected_output: `false` },
   { inputs: [`"admin@zeneducate.com"`], expected_output: `true` },
 ])
+
+generate_udf_test("platform_time_string_to_time", [
+  { inputs: [`"08:01:02"`], expected_output: `TIME '08:01:02'` },
+  { inputs: [`"08:1:2"`], expected_output: `TIME '08:01:02'` },
+  { inputs: [`"08:01"`], expected_output: `TIME '08:01:00'` },
+  { inputs: [`"08:1"`], expected_output: `TIME '08:01:00'` },
+  { inputs: [`"8:1 am"`], expected_output: `TIME '08:01:00'` },
+  { inputs: [`"8:10 am"`], expected_output: `TIME '08:10:00'` },
+  { inputs: [`"8:5 am"`], expected_output: `TIME '08:05:00'` },
+  { inputs: [`"8:5 pm"`], expected_output: `TIME '20:05:00'` },
+  { inputs: [`"12:5 pm"`], expected_output: `TIME '12:05:00'` },
+  { inputs: [`"12:5 am"`], expected_output: `TIME '00:05:00'` },
+  { inputs: [`"12:59 am"`], expected_output: `TIME '00:59:00'` },
+  { inputs: [`"01:01 am"`], expected_output: `TIME '01:01:00'` },
+])
