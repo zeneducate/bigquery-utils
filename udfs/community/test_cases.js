@@ -3567,3 +3567,21 @@ generate_udf_test("json_merge", [
   { inputs: [`JSON '{"a": 1}'`, `JSON '{"b": 2}'`], expected_output: `JSON '{"a": 1, "b": 2}'` },
   { inputs: [`JSON '{"a": 1, "b": 2}'`, `JSON '{"b": 3}'`], expected_output: `JSON '{"a": 1, "b": 3}'` },
 ]);
+
+generate_udaf_test("sumifn", {
+  input_columns: [`condition`, `value`],
+  input_rows: `SELECT mod(n, 2) = 0 as condition, cast(n as numeric) as value FROM UNNEST([1,2,3,4]) as n`,
+  expected_output: `cast(6 as numeric)`
+});
+
+generate_udaf_test("sumifn", {
+  input_columns: [`condition`, `value`],
+  input_rows: `SELECT mod(n, 2) = 0 as condition, n as value FROM UNNEST([]) as n`,
+  expected_output: `cast(0 as numeric)`
+});
+
+generate_udaf_test("sumifn", {
+  input_columns: [`condition`, `value`],
+  input_rows: `SELECT v > 5 as condition, cast(v as numeric) as value FROM UNNEST([0.1, 0.2, 5.1, 5.2]) as v`,
+  expected_output: `cast('10.3' as numeric)`
+});
