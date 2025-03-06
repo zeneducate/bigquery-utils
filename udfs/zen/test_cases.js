@@ -61,5 +61,24 @@ generate_udf_test("platform_numeric_string_to_numeric", [
   { inputs: [`"9,999.1"`], expected_output: `NUMERIC '9999.1'` },
   { inputs: [`"9,999,999.1"`], expected_output: `NUMERIC '9999999.1'` },
   { inputs: [`"1,234,567,890,123,456,789,012,345.6789"`], expected_output: `NUMERIC '1234567890123456789012345.6789'` }
+])
 
+generate_udf_test("interval_contains", [
+  { inputs: [0, 10, -1], expected_output: `false` },
+  { inputs: [0, 10, 0], expected_output: `true` },
+  { inputs: [0, 10, 5], expected_output: `true` },
+  { inputs: [0, 10, 10], expected_output: `true` },
+  { inputs: [0, 10, 11], expected_output: `false` },
+  { inputs: [0, null, -1], expected_output: `false` },
+  { inputs: [0, null, 1], expected_output: `true` },
+  { inputs: [0, null, 11], expected_output: `true` },
+])
+
+generate_udf_test("intervals_overlap", [
+  { inputs: [0, 3, -4, -1], expected_output: `false` },
+  { inputs: [0, 3, -4,  1], expected_output: `true` },
+  { inputs: [0, 3, 1,  2], expected_output: `true` },
+  { inputs: [0, 3, 1,  5], expected_output: `true` },
+  { inputs: [0, 3, 4,  5], expected_output: `false` },
+  { inputs: [0, 3, -4,  4], expected_output: `true` },
 ])
