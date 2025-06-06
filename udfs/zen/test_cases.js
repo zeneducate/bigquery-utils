@@ -82,3 +82,14 @@ generate_udf_test("intervals_overlap", [
   { inputs: [0, 3, 4,  5], expected_output: `false` },
   { inputs: [0, 3, -4,  4], expected_output: `true` },
 ])
+
+generate_udf_test("memorable_hash", [
+  { inputs: ['""', 0], expected_output: `"cranky-hopper-kite-0"` },
+  { inputs: ['""', 1], expected_output: `"vigilant-almeida-fan-1"` },
+  { inputs: ['"a"', 0], expected_output: `"eloquent-torvalds-arm-0"` },
+  { inputs: ['"a"', 0], expected_output: `"eloquent-torvalds-arm-0"` },
+  { inputs: ['"aa"', 0], expected_output: `"musing-bohr-swing-0"` },
+  { inputs: ['"_"', 0], expected_output: `"romantic-perlman-crib-0"` },
+  { inputs: ['"_"', 1], expected_output: `"heuristic-goldwasser-bat-1"` },
+  { inputs: ['" "', 17], expected_output: `"elated-kilby-sink-17"` },
+])

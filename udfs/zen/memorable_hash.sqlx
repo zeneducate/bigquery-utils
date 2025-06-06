@@ -1,0 +1,66 @@
+config { hasOutput: true } -- -*- sql -*-
+/*
+ * Copyright 2025 Zen Educate Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+js {
+
+  const adjectives = [ "admiring", "adoring", "affectionate", "agitated", "amazing", "angry", "awesome", "blissful", "boring", "brave", "clever", "cocky", "compassionate", "competent", "condescending", "confident", "cranky", "dazzling", "determined", "distracted", "dreamy", "eager", "ecstatic", "elastic", "elated", "elegant", "eloquent", "epic", "fervent", "festive", "flamboyant", "focused", "friendly", "frosty", "gallant", "gifted", "goofy", "gracious", "happy", "hardcore", "heuristic", "hopeful", "hungry", "infallible", "inspiring", "jolly", "jovial", "keen", "kind", "laughing", "loving", "lucid", "mystifying", "modest", "musing", "naughty", "nervous", "nifty", "nostalgic", "objective", "optimistic", "peaceful", "pedantic", "pensive", "practical", "priceless", "quirky", "quizzical", "relaxed", "reverent", "romantic", "sad", "serene", "sharp", "silly", "sleepy", "stoic", "stupefied", "suspicious", "tender", "thirsty", "trusting", "unruffled", "upbeat", "vibrant", "vigilant", "vigorous", "wizardly", "wonderful", "xenodochial", "youthful", "zealous", "zen", "red", "orange", "purple", "yellow", "green", "blue"];
+
+  const names = [ "albattani", "allen", "almeida", "agnesi", "archimedes", "ardinghelli", "aryabhata", "austin", "babbage", "banach", "bardeen", "bartik", "bassi", "beaver", "bell", "benz", "bhabha", "bhaskara", "blackwell", "bohr", "booth", "borg", "bose", "boyd", "brahmagupta", "brattain", "brown", "carson", "chandrasekhar", "shannon", "clarke", "colden", "cori", "cray", "curran", "curie", "darwin", "davinci", "dijkstra", "dubinsky", "easley", "edison", "einstein", "elion", "engelbart", "euclid", "euler", "fermat", "fermi", "feynman", "franklin", "galileo", "gates", "goldberg", "goldstine", "goldwasser", "golick", "goodall", "haibt", "hamilton", "hawking", "heisenberg", "hermann", "heyrovsky", "hodgkin", "hoover", "hopper", "hugle", "hypatia", "jackson", "jang", "jennings", "jepsen", "johnson", "joliot", "jones", "kalam", "kare", "keller", "kepler", "khorana", "kilby", "kirch", "knuth", "kowalevski", "lalande", "lamarr", "lamport", "leakey", "leavitt", "lewin", "lichterman", "liskov", "lovelace", "lumiere", "mahavira", "mayer", "mccarthy", "mcclintock", "mclean", "mcnulty", "meitner", "meninsky", "mestorf", "minsky", "mirzakhani", "morse", "murdock", "neumann", "newton", "nightingale", "nobel", "noether", "northcutt", "noyce", "panini", "pare", "pasteur", "payne", "perlman", "pike", "poincare", "poitras", "ptolemy", "raman", "ramanujan", "ride", "montalcini", "ritchie", "roentgen", "rosalind", "saha", "sammet", "shaw", "shirley", "shockley", "sinoussi", "snyder", "spence", "stallman", "stonebraker", "swanson", "swartz", "swirles", "tesla", "thompson", "torvalds", "turing", "varahamihira", "visvesvaraya", "volhard", "wescoff", "wiles", "williams", "wilson", "wing", "wozniak", "wright", "yalow", "yonath"];
+
+  const nouns = ["apple", "arm", "ball", "banana", "bat", "bed", "bike", "bird", "book", "book", "boy", "bun", "cake", "can", "cap", "car", "cat", "chin", "clam", "class", "clover", "club", "corn", "cow", "crayon", "crib", "crow", "crowd", "crown", "cub", "cup", "dad", "day", "desk", "dime", "dirt", "dog", "doll", "dress", "dust", "fan", "fang", "feet", "field", "flag", "flower", "fog", "game", "girl", "gun", "hall", "hat", "heat", "hen", "hill", "home", "horn", "hose", "jar", "joke", "juice", "kite", "kite", "lake", "maid", "man", "map", "mask", "meal", "meat", "men", "mice", "milk", "mint", "mom", "moon", "morning", "mother", "name", "nest", "nose", "pan", "pear", "pen", "pencil", "pet", "pie", "pig", "plant", "pot", "rain", "rat", "river", "road", "rock", "room", "rose", "seed", "shape", "shoe", "shop", "show", "sink", "snail", "snake", "snow", "soda", "sofa", "son", "star", "step", "stew", "stove", "straw", "string", "summer", "sun", "swing", "table", "tank", "team", "tent", "test", "toe", "toes", "tree", "tub", "van", "vest", "water", "wing", "winter", "woman"];
+
+  const UNNEST = strings => `UNNEST([${ strings.map(s => `"${s}"`).join(", ")}])`;
+
+  /*
+   * NOTE I'm aware adding in the salt like this means it's not really
+   * a salt at all, but this is totally fine for our (non
+   * crytptographic) purposes. NOTE 2: This javascript code isn't
+   * doing the hashing, it's gnerating SQL code, as a string, that
+   * will do the hashing at runtime. 20250606:segv
+   */
+
+  const hash = (byte_a, byte_b) => `((farm_fingerprint(cast(salt as string)) & 0xff0000) + (to_code_points(sha256(value))[${byte_a}] << 8) + to_code_points(sha256(value))[${byte_b}])`;
+
+}
+
+
+-- memorable_hash:
+-- Input: A string
+-- Output: A human readable hash
+CREATE OR REPLACE FUNCTION ${self()}(value STRING, salt INT64)
+RETURNS STRING
+AS (
+
+CONCAT(
+
+(select adjective from ${UNNEST(adjectives)} as adjective with offset `offset` where `offset` = mod(${hash(0, 1)}, ${adjectives.length})),
+
+'-',
+
+(select scientist from ${UNNEST(names)} as scientist with offset `offset` where `offset` = mod(${hash(2, 3)}, ${names.length})),
+
+'-',
+
+(select noun from ${UNNEST(nouns)} noun with offset as `offset` where `offset` = mod(${hash(4, 5)}, ${nouns.length})),
+
+'-',
+cast(salt as string)
+
+)
+
+
+)
