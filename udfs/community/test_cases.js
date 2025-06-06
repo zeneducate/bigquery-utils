@@ -3712,7 +3712,56 @@ generate_udf_test("cw_regexp_extract_all_start_pos", [
     expected_output: `CAST(NULL AS ARRAY<STRING>)`
   },
 ]);
-
+generate_udf_test("cw_to_xml_string", [
+  {
+    inputs: [`"ab"`],
+    expected_output: `"ab"`,
+  },
+  {
+    inputs: [`"<a&b>"`],
+    expected_output: `"&lt;a&amp;b&gt;"`,
+  },
+]);
+generate_udf_test("cw_xml_element", [
+  {
+    inputs: [`"x"`, `["a", "&amp;", "b"]`],
+    expected_output: `"<x>a&amp;b</x>"`,
+  },
+]);
+generate_udf_test("cw_xml_element_with_attributes", [
+  {
+    inputs: [`"x"`, `[STRUCT("a" AS name, "42" AS value)]`, `["a", "&amp;", "b"]`],
+    expected_output: `'<x a="42" >a&amp;b</x>'`,
+  },
+  {
+    inputs: [`"x"`, `[STRUCT("a" AS name, "42" AS value), STRUCT(CAST(NULL AS STRING) AS name, "43" AS value)]`, `["a", "&amp;", "b"]`],
+    expected_output: `'<x a="42" >a&amp;b</x>'`,
+  },
+  {
+    inputs: [`"x"`, `[STRUCT("x" AS name, "" AS value)]`, `["a", "&amp;", "b"]`],
+    expected_output: `"<x>a&amp;b</x>"`,
+  },
+]);
+generate_udf_test("cw_xml_extract", [
+  {
+    inputs: [`"<a><b>x</b><b>y</b></a>"`, `"//b"`],
+    expected_output: `"<b>x</b><b>y</b>"`,
+  },
+  {
+    inputs: [`"<a><b>x</b><b>y</b></a>"`, `"//b/text()"`],
+    expected_output: `"xy"`,
+  },
+]);
+generate_udf_test("gunzip", [
+  {
+    inputs: [`FROM_BASE64("H4sIAOL4JWgAA8tIzcnJVyjPL8pJAQCFEUoNCwAAAA==")`],
+    expected_output: `CAST("hello world" AS BYTES)`,
+  },
+  {
+    inputs: [`CAST(NULL AS BYTES)`],
+    expected_output: `CAST(NULL AS BYTES)`,
+  },
+]);
 generate_udf_test("json_merge", [
   { inputs: [`JSON '{}'`, `JSON '{}'`], expected_output: `JSON '{}'` },
   { inputs: [`JSON '{}'`, `JSON '{"a": 1}'`], expected_output: `JSON '{"a": 1}'` },
@@ -3721,19 +3770,16 @@ generate_udf_test("json_merge", [
   { inputs: [`JSON '{"a": 1}'`, `JSON '{"b": 2}'`], expected_output: `JSON '{"a": 1, "b": 2}'` },
   { inputs: [`JSON '{"a": 1, "b": 2}'`, `JSON '{"b": 3}'`], expected_output: `JSON '{"a": 1, "b": 3}'` },
 ]);
-
 generate_udaf_test("sumifn", {
   input_columns: [`condition`, `value`],
   input_rows: `SELECT mod(n, 2) = 0 as condition, cast(n as numeric) as value FROM UNNEST([1,2,3,4]) as n`,
   expected_output: `cast(6 as numeric)`
 });
-
 generate_udaf_test("sumifn", {
   input_columns: [`condition`, `value`],
   input_rows: `SELECT mod(n, 2) = 0 as condition, n as value FROM UNNEST([]) as n`,
   expected_output: `cast(0 as numeric)`
 });
-
 generate_udaf_test("sumifn", {
   input_columns: [`condition`, `value`],
   input_rows: `SELECT v > 5 as condition, cast(v as numeric) as value FROM UNNEST([0.1, 0.2, 5.1, 5.2]) as v`,
