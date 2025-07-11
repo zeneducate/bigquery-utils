@@ -16,7 +16,7 @@ config { hasOutput: true }
  */
 
 CREATE OR REPLACE AGGREGATE FUNCTION ${self()}(b BOOLEAN)
-RETURNS BOOLEAN
+RETURNS BOOL
 LANGUAGE js 
 OPTIONS (
   description="Returns the most frequently occurring argument"

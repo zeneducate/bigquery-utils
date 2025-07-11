@@ -21,7 +21,7 @@ config { hasOutput: true } -- -*- sql -*-
 --        NB: All intervals are assumed to be inclusive
 -- Output: True if X is between A and B
 CREATE OR REPLACE FUNCTION ${self()}(start_a ANY TYPE, end_a ANY TYPE, start_b ANY TYPE, end_b ANY TYPE)
-RETURNS BOOLEAN
+RETURNS BOOL
 AS (
   case
     when end_a is null and end_b is null -- both ranges are open, always overlaps

@@ -20,7 +20,7 @@ config { hasOutput: true } -- -*- sql -*-
 --        x The point to test
 -- Output: True if X is between A and B
 CREATE OR REPLACE FUNCTION ${self()}(a ANY TYPE, b ANY TYPE, x ANY TYPE)
-RETURNS BOOLEAN
+RETURNS BOOL
 AS (
   if(
     b is null,
