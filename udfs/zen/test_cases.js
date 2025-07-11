@@ -93,3 +93,14 @@ generate_udf_test("memorable_hash", [
   { inputs: ['"_"', 1], expected_output: `"heuristic-goldwasser-bat-1"` },
   { inputs: ['" "', 17], expected_output: `"elated-kilby-sink-17"` },
 ])
+
+generate_udf_test("is_blank", [
+  { inputs: ['""'], expected_output: `true` },
+  { inputs: ['" "'], expected_output: `true` },
+  { inputs: ['"                   \\t                    \\n            "'], expected_output: `true` },
+  { inputs: ['"\\t"'], expected_output: `true` },
+  { inputs: ['"\\n"'], expected_output: `true` },
+  { inputs: ['"0"'], expected_output: `false` },
+  { inputs: ['" a "'], expected_output: `false` },
+  { inputs: ['"                                . "'], expected_output: `false` },
+]);
