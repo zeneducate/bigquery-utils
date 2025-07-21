@@ -104,3 +104,14 @@ generate_udf_test("is_blank", [
   { inputs: ['" a "'], expected_output: `false` },
   { inputs: ['"                                . "'], expected_output: `false` },
 ]);
+
+generate_udf_test("is_present", [
+  { inputs: ['""'], expected_output: `false` },
+  { inputs: ['" "'], expected_output: `false` },
+  { inputs: ['"                   \\t                    \\n            "'], expected_output: `false` },
+  { inputs: ['"\\t"'], expected_output: `false` },
+  { inputs: ['"\\n"'], expected_output: `false` },
+  { inputs: ['"0"'], expected_output: `true` },
+  { inputs: ['" a "'], expected_output: `true` },
+  { inputs: ['"                                . "'], expected_output: `true` },
+]);
