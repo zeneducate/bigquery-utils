@@ -4,6 +4,9 @@ generate_udf_test("postcode_outcode", [
   { inputs: [`"SW1A 1AA"`], expected_output: `"SW1A"` },
   { inputs: [`"E14 3BE"`], expected_output: `"E14"` },
   { inputs: [`"FooBar"`], expected_output: `"FooBar"` },
+  { inputs: [`"12345"`], expected_output: `"12345"` },
+  { inputs: [`"12345-1"`], expected_output: `"12345"` },
+  { inputs: [`"12345-1234"`], expected_output: `"12345"` },
 ]);
 
 generate_udf_test("week_ending", [

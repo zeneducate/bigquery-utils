@@ -22,5 +22,9 @@ config { hasOutput: true } -- -*- sql -*-
 CREATE OR REPLACE FUNCTION ${self()}(post_code STRING)
 RETURNS STRING
 AS (
-  COALESCE(REGEXP_EXTRACT(post_code, r'^(.*?)\s*\d[A-Z][A-Z]$'), post_code)
+  coalesce(
+    regexp_extract(post_code,  r'^(\d+)(?:-\d+)?$'),
+    regexp_extract(post_code, r'^(.*?)\s*\d[A-Z][A-Z]$'),
+    post_code
+  )
 );
